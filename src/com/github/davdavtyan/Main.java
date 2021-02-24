@@ -8,13 +8,12 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println(Utils.SELECT_OPTION_DOWNLOAD_ADDRESS);
         System.out.println(Utils.FOR_LOAD_YOUR_SELECTED_TEXT);
         System.out.println(Utils.FOR_LOAD_RANDOM_TEXT);
         System.out.println(Utils.FOR_GET_ORIGINAL_ADDRESS);
         System.out.println(Utils.EXIT);
-        boolean isStart = true;
-        while (isStart) {
+        while (true) {
+            System.out.println(Utils.SELECT_OPTION_DOWNLOAD_ADDRESS);
             int i;
             if (!sc.hasNextInt()) {
                 System.err.println(Utils.BEAD_DATA);
@@ -28,40 +27,37 @@ public class Main {
                 System.out.println(Utils.ENTER_ORIGINAL_ADDRESS);
                 String originUrl = sc.next();
 
-                System.out.println(Utils.ENTER_TEXT_FOR_SHORT_ADDRESS);
-                String keyword = sc.next();
-
-                if (!Validator.UrlIsValid(originUrl) || !Validator.keywordIsValid(keyword)) {
-                    System.err.println(Utils.BEAD_ADDRESS);
+                if (Validator.validateUrl(originUrl)) {
+                    System.out.println(Utils.ENTER_TEXT_FOR_SHORT_ADDRESS);
+                    String keyword = sc.next();
+                    if (Validator.validateKeyword(keyword)) {
+                        System.out.println(loadUrl(originUrl, keyword));
+                    } else {
+                        System.err.println(Utils.BEAD_ADDRESS);
+                    }
                 } else {
-                    System.out.println(loadUrl(originUrl, keyword));
+                    System.err.println(Utils.BEAD_ADDRESS);
                 }
-                i = -1;
 
             } else if (i == 2) {
                 System.out.println(Utils.ENTER_ORIGINAL_ADDRESS);
                 String originUrl = sc.next();
-                if (!Validator.UrlIsValid(originUrl)) {
+                if (!Validator.validateUrl(originUrl)) {
                     System.err.println(Utils.BEAD_ADDRESS);
                 } else {
                     System.out.println(loadUrl(originUrl));
                 }
-                i = -1;
             } else if (i == 3) {
                 System.out.println(Utils.ENTER_SHORT_ADDRESS);
                 String shortUrl = sc.next();
-                if (!urls.containsValue(shortUrl)) {
+                if (!urls.containsKey(shortUrl)) {
                     System.err.println(Utils.BEAD_ADDRESS);
                 } else {
                     System.out.println(getOriginUrl(shortUrl));
                 }
-                i = -1;
             } else if (i == 0) {
                 sc.close();
-                isStart = false;
-            }
-            if (i == -1) {
-                System.out.println(Utils.SELECT_OPTION_DOWNLOAD_ADDRESS);
+                break;
             }
         }
     }
@@ -89,11 +85,11 @@ public class Main {
         String textHttp = originUrl.substring(0, index + 2);
         String newUrl = textHttp + "short.en/" + shortText;
 
-        urls.put(originUrl, newUrl);
+        urls.put(newUrl, originUrl);
         return newUrl;
     }
 
     public static String getOriginUrl(String shortUrl) {
-        return urls.entrySet().stream().filter(entry -> entry.getValue().equals(shortUrl)).findFirst().get().getKey();
+        return urls.get(shortUrl);
     }
 }

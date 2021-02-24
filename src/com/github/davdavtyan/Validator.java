@@ -11,7 +11,7 @@ public class Validator {
 
     private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
-    public static boolean UrlIsValid(String url) {
+    public static boolean validateUrl(String url) {
 
         if (url == null) {
             return false;
@@ -21,7 +21,7 @@ public class Validator {
         return matcher.matches();
     }
 
-    public static boolean keywordIsValid(String keyword) {
+    public static boolean validateKeyword(String keyword) {
         return keyword.length() <= 20;
     }
 
