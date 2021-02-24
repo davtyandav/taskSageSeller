@@ -51,7 +51,7 @@ public class Main {
                 String originUrl = urlShorter.getOriginUrl(shortUrl);
 
                 if (originUrl == null) {
-                    System.err.println("Original URL not found by '" + shortUrl + "'");
+                    System.err.println("Original URL not found by " + shortUrl );
                 } else {
                     System.out.println("Original URL: " + originUrl);
                 }
