@@ -88,8 +88,8 @@ public class Main {
     }
 
     private static String createUrl(String originUrl, String sb) {
-        int i = originUrl.indexOf("//");
-        String substring = originUrl.substring(0, i + 2);
+        int index = originUrl.indexOf("//");
+        String substring = originUrl.substring(0, index + 2);
         String url = substring + "short.en/" + sb;
 
         urls.put(originUrl, url);
@@ -97,12 +97,8 @@ public class Main {
     }
 
     public static String getUrl(String shortUrl) {
-        Map.Entry<String, String> stringStringEntry = urls.entrySet().stream().filter(t -> t.getValue().equals(shortUrl)).findFirst().orElse(null);
-        if (stringStringEntry != null) {
-            return stringStringEntry.getKey();
-        } else {
-            return Utils.BEAD_ADDRESS;
-        }
+        Map.Entry<String, String> entryUrl = urls.entrySet().stream().filter(entry -> entry.getValue().equals(shortUrl)).findFirst().orElse(null);
+        return entryUrl != null ? entryUrl.getKey() : Utils.BEAD_ADDRESS;
     }
 
 }
