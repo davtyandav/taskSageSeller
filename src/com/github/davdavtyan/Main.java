@@ -29,30 +29,31 @@ public class Main {
                 String originUrl = sc.next();
 
                 System.out.println(Utils.ENTER_TEXT_FOR_SHORT_ADDRESS);
-                String next = sc.next();
+                String keyword = sc.next();
 
-                String loadUrl = loadUrl(originUrl, next);
-                if (loadUrl.equals(Utils.BEAD_ADDRESS)) {
+                if (!Validator.UrlIsValid(originUrl) || !Validator.keywordIsValid(keyword)) {
                     System.err.println(Utils.BEAD_ADDRESS);
                 } else {
-                    System.out.println(loadUrl);
+                    System.out.println(loadUrl(originUrl, keyword));
                 }
                 i = -1;
 
             } else if (i == 2) {
                 System.out.println(Utils.ENTER_ORIGINAL_ADDRESS);
                 String originUrl = sc.next();
-
-                System.out.println(loadRandomUrl(originUrl));
+                if (!Validator.UrlIsValid(originUrl)) {
+                    System.err.println(Utils.BEAD_ADDRESS);
+                } else {
+                    System.out.println(loadUrl(originUrl));
+                }
                 i = -1;
             } else if (i == 3) {
                 System.out.println(Utils.ENTER_SHORT_ADDRESS);
                 String shortUrl = sc.next();
-                String url = getUrl(shortUrl);
-                if (url.equals(Utils.BEAD_ADDRESS)) {
+                if (!urls.containsValue(shortUrl)) {
                     System.err.println(Utils.BEAD_ADDRESS);
                 } else {
-                    System.out.println(url);
+                    System.out.println(getOriginUrl(shortUrl));
                 }
                 i = -1;
             } else if (i == 0) {
@@ -63,17 +64,13 @@ public class Main {
                 System.out.println(Utils.SELECT_OPTION_DOWNLOAD_ADDRESS);
             }
         }
-
     }
 
     public static String loadUrl(String originUrl, String keyword) {
-        if (keyword.length() > 20 || !URLValidator.isValid(originUrl)) {
-            return Utils.BEAD_DATA;
-        }
         return createUrl(originUrl, keyword);
     }
 
-    public static String loadRandomUrl(String originUrl) {
+    public static String loadUrl(String originUrl) {
         return createUrl(originUrl, loadRandomTextForUrl());
     }
 
@@ -87,18 +84,16 @@ public class Main {
         return sb.toString();
     }
 
-    private static String createUrl(String originUrl, String sb) {
+    private static String createUrl(String originUrl, String shortText) {
         int index = originUrl.indexOf("//");
-        String substring = originUrl.substring(0, index + 2);
-        String url = substring + "short.en/" + sb;
+        String textHttp = originUrl.substring(0, index + 2);
+        String newUrl = textHttp + "short.en/" + shortText;
 
-        urls.put(originUrl, url);
-        return url;
+        urls.put(originUrl, newUrl);
+        return newUrl;
     }
 
-    public static String getUrl(String shortUrl) {
-        Map.Entry<String, String> entryUrl = urls.entrySet().stream().filter(entry -> entry.getValue().equals(shortUrl)).findFirst().orElse(null);
-        return entryUrl != null ? entryUrl.getKey() : Utils.BEAD_ADDRESS;
+    public static String getOriginUrl(String shortUrl) {
+        return urls.entrySet().stream().filter(entry -> entry.getValue().equals(shortUrl)).findFirst().get().getKey();
     }
-
 }
