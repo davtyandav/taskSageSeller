@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UrlShorter {
+    public static final String ALPHA_NUMERIC_TEXT = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
 
     public Map<String, String> getUrls() {
         return urls;
@@ -23,8 +24,8 @@ public class UrlShorter {
         StringBuilder sb = new StringBuilder(5);
 
         for (int i = 0; i < 5; i++) {
-            int index = (int) (Utils.ALPHA_NUMERIC_TEXT.length() * Math.random());
-            sb.append(Utils.ALPHA_NUMERIC_TEXT.charAt(index));
+            int index = (int) (ALPHA_NUMERIC_TEXT.length() * Math.random());
+            sb.append(ALPHA_NUMERIC_TEXT.charAt(index));
         }
         return sb.toString();
     }
