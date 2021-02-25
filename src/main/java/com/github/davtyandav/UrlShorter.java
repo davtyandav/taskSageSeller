@@ -15,18 +15,11 @@ public class UrlShorter {
 
     private final Map<String, String> urls = new HashMap<>();
 
-    public String shrinkUrl(String originUrl) throws InvalidUrlException {
-        try {
-            return shrinkUrl(originUrl, generateRandomTextForUrl());
-        } catch (InvalidKeywordException e) {
-            throw new IllegalStateException("Can not be");
-        }
+    public String addShrinkUrl(String originUrl) {
+        return addShrinkUrl(originUrl, generateRandomTextForUrl());
     }
 
-    public String shrinkUrl(String originUrl, String keyword) throws InvalidUrlException, InvalidKeywordException {
-        validateUrl(originUrl);
-        validateKeyword(keyword);
-
+    public String addShrinkUrl(String originUrl, String keyword) {
         String shortenUrl = createShortenUrlFromOriginal(originUrl, keyword);
         urls.put(shortenUrl, originUrl);
         return shortenUrl;
@@ -36,7 +29,7 @@ public class UrlShorter {
         return urls.get(shortUrl);
     }
 
-    private static String generateRandomTextForUrl() {
+    private String generateRandomTextForUrl() {
         char[] chars = new char[5];
 
         int templateLength = ALPHA_NUMERIC_TEXT.length();
@@ -49,14 +42,14 @@ public class UrlShorter {
         return new String(chars);
     }
 
-    private static String createShortenUrlFromOriginal(String originUrl, String shortText) {
+    private String createShortenUrlFromOriginal(String originUrl, String shortText) {
         int index = originUrl.indexOf("//");
         String textHttp = originUrl.substring(0, index + 2);
 
         return textHttp + "short.en/" + shortText;
     }
 
-    private static void validateUrl(String url) throws InvalidUrlException {
+    public void validateUrl(String url) throws InvalidUrlException {
         if (url == null) {
             throw new InvalidUrlException("Url not provided");
         }
@@ -67,7 +60,7 @@ public class UrlShorter {
         }
     }
 
-    private static void validateKeyword(String keyword) throws InvalidKeywordException {
+    public void validateKeyword(String keyword) throws InvalidKeywordException {
         if (keyword.length() > 20) {
             throw new InvalidKeywordException("Too large keyword: " + keyword);
         }

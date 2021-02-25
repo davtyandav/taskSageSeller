@@ -25,33 +25,39 @@ public class Main {
             if (i == 1) {
                 System.out.println("Enter the original address");
                 String originUrl = sc.next();
-
-                System.out.println("Enter the keyword");
-                String keyword = sc.next();
-
                 try {
-                    String shortenURL = urlShorter.shrinkUrl(originUrl, keyword);
-                    System.out.println("Shorten URL: " + shortenURL);
-                } catch (InvalidUrlException | InvalidKeywordException e) {
-                    System.err.println(e.getMessage());
-                }
-            } else if (i == 2) {
-                System.out.println("Enter the original address");
-                String originUrl = sc.next();
-
-                try {
-                    String shortenURL = urlShorter.shrinkUrl(originUrl);
+                    urlShorter.validateUrl(originUrl);
+                    System.out.println("Enter the keyword");
+                    String keyword = sc.next();
+                    try {
+                        urlShorter.validateKeyword(keyword);
+                    } catch (InvalidKeywordException e) {
+                        System.err.println(e.getMessage());
+                    }
+                    String shortenURL = urlShorter.addShrinkUrl(originUrl, keyword);
                     System.out.println("Shorten URL: " + shortenURL);
                 } catch (InvalidUrlException e) {
                     System.err.println(e.getMessage());
                 }
+
+            } else if (i == 2) {
+                System.out.println("Enter the original address");
+                String originUrl = sc.next();
+                try {
+                    urlShorter.validateUrl(originUrl);
+                    String shortenURL = urlShorter.addShrinkUrl(originUrl);
+                    System.out.println("Shorten URL: " + shortenURL);
+                } catch (InvalidUrlException e) {
+                    System.err.println(e.getMessage());
+                }
+
             } else if (i == 3) {
                 System.out.println("Enter the short address");
                 String shortUrl = sc.next();
                 String originUrl = urlShorter.getOriginUrl(shortUrl);
 
                 if (originUrl == null) {
-                    System.err.println("Original URL not found by " + shortUrl );
+                    System.err.println("Original URL not found by " + shortUrl);
                 } else {
                     System.out.println("Original URL: " + originUrl);
                 }
